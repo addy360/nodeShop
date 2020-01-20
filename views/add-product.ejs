@@ -1,0 +1,17 @@
+<%- include('includes/header.ejs') %>
+<body>
+<%- include('includes/nav.ejs') %>
+	
+	<main class="y-2">
+		<div class="container">
+			<div class="card mx-auto">
+				<h1 class="mb text-center">Add Product</h1>
+				<form action="/admin/add-product" method="post">
+					<input class="input mb" type="text" name="title">
+					<button class=" button" type="submit">Add product</button>
+				</form>
+			</div>
+		</div>
+	</main>
+
+<%- include('includes/footer.ejs') %>
