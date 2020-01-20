@@ -16,7 +16,7 @@ app.use(bodyparser.urlencoded({extended:false}))
 app.use('/admin',adminData.router)
 app.use(shopRoutes)
 
-app.use((req,res,next)=>res.render('404',{pageTitle:'Page Not Found'}))
+app.use((req,res,next)=>res.render('404',{pageTitle:'Page Not Found',path:''}))
 
 
 
