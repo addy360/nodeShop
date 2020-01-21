@@ -1,6 +1,6 @@
-<%- include('includes/header.ejs') %>
+<%- include('../includes/header.ejs') %>
 <body>
-<%- include('includes/nav.ejs') %>
+<%- include('../includes/nav.ejs') %>
 
 	<main class="y-2">
 		<div class="container">
@@ -15,10 +15,10 @@
 					<div class="header">
 						<h1 class="text-center mb"><%= prod.title %></h1>
 					</div>
-					<img class="d-block mb" src="https://picsum.photos/id/0/300/200">
+					<img class="d-block mb" src="<%= prod.imgUrl %>">
 					<div class="content mb">
-						<h2>$19.99</h2>
-						<p>A very interesting laptop</p>
+						<h2>$<%= prod.price %></h2>
+						<p><%= prod.description %></p>
 					</div>
 					<button class="button"> Add to cart</button>
 				</div>
@@ -28,4 +28,4 @@
 		</div>
 	</main>
 
-<%- include('includes/footer.ejs') %>
+<%- include('../includes/footer.ejs') %>

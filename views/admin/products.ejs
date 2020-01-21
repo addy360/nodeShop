@@ -1,0 +1,36 @@
+<%- include('../includes/header.ejs') %>
+<body>
+<%- include('../includes/nav.ejs') %>
+
+	<main class="y-2">
+		<div class="container">
+			<h1 class="mb">My products</h1>
+			<% if(products.length == 0){ %>
+			<p class="text-center"> Currently no Products</p>
+			<%} else{ %>
+			<p class="mb">list of all the products...</p>
+			<div class="grid">
+				<% for(let prod of products){ %>
+				<div>
+					<div class="header">
+						<h1 class="text-center mb"><%= prod.title %></h1>
+					</div>
+					<img class="d-block mb" src="<%= prod.imgUrl %>">
+					<div class="content mb">
+						<h2>$<%= prod.price %></h2>
+						<p><%= prod.description %></p>
+					</div>
+					<form action="admin/edit-product" method="get">
+						<button class="button mb"> Edit</button>
+					</form>
+					<form action="admin/delete-product" method="post">
+						<button class="button mb"> Delete</button>
+					</form>
+				</div>
+				<% } %>
+			</div>
+			<% } %>
+		</div>
+	</main>
+
+<%- include('../includes/footer.ejs') %>

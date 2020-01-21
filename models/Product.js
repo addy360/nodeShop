@@ -13,8 +13,11 @@ function getData(cb){
 }
 
 module.exports = class Product{
-	constructor(t){
-		this.title = t
+	constructor(title,imgUrl, description, price){
+		this.title = title,
+		this.description=description,
+		this.imgUrl=imgUrl,
+		this.price=price
 	}
 
 	save(){
