@@ -1,0 +1,24 @@
+<%- include('../includes/header.ejs') %>
+<body>
+<%- include('../includes/nav.ejs') %>
+	
+	<main class="y-2">
+		<div class="container">
+			<div class="card mx-auto">
+				<h1 class="mb text-center"><% if(editMode){ %> Update product <%} else{%> Add product<%}%></h1>
+				<form action="/admin/<% if(editMode){ %>edit-product <%} else{%>add-product<%}%>" method="post">
+					<% if (editMode) { %>
+						<input type="hidden" value="<%= product.id%>" name="productId">
+					<% } %>
+					
+					<input class="input mb" type="text" name="title" placeholder="Enter title" value="<% if(editMode){ %><%= product.title%><%}%>">
+					<input class="input mb" type="text" name="imgUrl" placeholder="Enter image url" value="<% if(editMode){ %><%= product.imgUrl%><%}%>">
+					<input class="input mb" type="number" name="price" placeholder="Enter price" step='0.01' value="<% if(editMode){ %><%= product.price%><%}%>">
+					<textarea class="input mb" col="5" placeholder="Enter Description" name="description"><% if(editMode){ %><%= product.description%><%}%></textarea>
+					<button class=" button" type="submit"> <% if(editMode){ %> Update product <%} else{%> Add product<%}%></button>
+				</form>
+			</div>
+		</div>
+	</main>
+
+<%- include('../includes/footer.ejs') %>

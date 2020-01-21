@@ -54,7 +54,9 @@
 	.card{
 		width: 60%;
 		padding: 2rem;
-		background: #ddd
+		background: #ddd;
+		box-shadow: 3px 3px 10px rgba(0,0,0,0.3)
+
 	}
 	
 	.text-center{
@@ -62,6 +64,9 @@
 	}
 	.mb{
 		margin-bottom: 1rem;
+	}
+	.mt{
+		margin-top: 1rem;
 	}
 	.mx-auto{
 		margin: 0 auto;
@@ -81,6 +86,7 @@
 		transition: .3s ease-in-out;
 		cursor: pointer;
 		border-radius: 2px;
+		text-decoration: none
 	}
 	.button:hover{
 		background: #fff;

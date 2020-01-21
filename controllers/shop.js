@@ -1,4 +1,5 @@
 const Product = require('../models/Product')
+const Cart = require('../models/Cart')
 
 
 
@@ -7,12 +8,24 @@ exports.getProducts = (req, res, next)=>{
 		let data = {
 		products:prod,
 		pageTitle:'All products',
-		path : 'ptoducts'
+		path : '/products'
 	}
 	res.render('shop/product-list',data)
 	})
 	
 
+}
+
+exports.getProduct = (req,res,next)=>{
+	let productId = req.params.id
+	Product.fetchOneById(productId,product=>{
+		let data = {
+		product:product,
+		pageTitle:'Product Details',
+		path : ''
+	}
+		res.render('shop/product-item',data)
+	})
 }
 
 exports.getIndex=(req,res,next)=>{
@@ -33,6 +46,14 @@ exports.getCart = (req,res,next)=>{
 		pageTitle:'your cart'
 	}
 	res.render('shop/cart' , data)
+}
+
+exports.postCart= (req,res,next)=>{
+	productId = req.body.productId
+	Product.fetchOneById(productId,product=>{
+		Cart.addToCart(productId,product.price)
+	})
+	res.redirect('/cart')
 }
 
 exports.getOrders = (req,res,next)=>{

@@ -13,7 +13,8 @@ function getData(cb){
 }
 
 module.exports = class Product{
-	constructor(title,imgUrl, description, price){
+	constructor(id,title,imgUrl, description, price){
+		this.id=id;
 		this.title = title,
 		this.description=description,
 		this.imgUrl=imgUrl,
@@ -22,12 +23,31 @@ module.exports = class Product{
 
 	save(){
 		getData(data=>{
-			data.push(this)
-			fs.writeFile(p,JSON.stringify(data), (err)=>console.log(err))
+			if (this.id) {
+				const productIndex = data.findIndex(p=>p.id===this.id)
+				const updatedProdArray = [...data]
+				updatedProdArray[productIndex] = this
+				fs.writeFile(p,JSON.stringify(updatedProdArray), (err)=>console.log(err))	
+			}else{
+
+				this.id = Math.random().toString()
+				data.push(this)
+				fs.writeFile(p,JSON.stringify(data), (err)=>console.log(err))
+			}
 		})
 	}
 
 	static fetchAll(callback){
 		getData(callback)
+	}
+
+	static fetchOneById(id,callback){
+		let product = null
+		getData(data=>{
+			product = data.find(p=>p.id===id)
+			callback(product)
+		})
+
+
 	}
 }

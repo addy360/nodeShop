@@ -1,0 +1,21 @@
+<%- include('../includes/header.ejs') %>
+<body>
+<%- include('../includes/nav.ejs') %>
+
+<main>
+	<div class="container y-2">
+		<div class="card mx-auto">
+			<h1 class="text-center mb"><%= product.title %></h1>
+			<hr>
+			<img class="d-block mx-auto mt" src="<%= product.imgUrl %>">
+			<h2 ><%= product.price %></h2>
+			<p class="mb"><%= product.description %></p>
+			<form action="/cart" method="post">
+				<button class="button"> Add to cart</button>
+				<input type="hidden" name="productId" value="<%= product.id %>">
+			</form>
+		</div>
+	</div>
+</main>
+
+<%- include('../includes/footer.ejs') %>
