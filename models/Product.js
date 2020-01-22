@@ -1,19 +1,6 @@
-const fs = require('fs')
-const path = require('path')
+const db = require('../util/database')
 const Cart = require('./Cart')
 
-const p = path.join(path.dirname(process.mainModule.filename), 'data','products.json')
-
-function getData(cb){
-		fs.readFile(p,(err,data)=>{
-			if (err) {
-				cb([])
-			}else{
-			 cb(JSON.parse(data))
-			}
-		})
-	}
-	
 
 module.exports = class Product{
 	constructor(id,title,imgUrl, description, price){
@@ -25,46 +12,20 @@ module.exports = class Product{
 	}
 
 	save(){
-		getData(data=>{
-			if (this.id) {
-				const productIndex = data.findIndex(p=>p.id===this.id)
-				const updatedProdArray = [...data]
-				updatedProdArray[productIndex] = this
-				fs.writeFile(p,JSON.stringify(updatedProdArray), (err)=>console.log(err))	
-			}else{
-
-				this.id = Math.random().toString()
-				data.push(this)
-				fs.writeFile(p,JSON.stringify(data), (err)=>console.log(err))
-			}
-		})
+		return db.execute('INSERT INTO products VALUES (?,?,?,?,?)',[null,this.title,this.imgUrl,this.description,this.price])
 	}
 
-	static fetchAll(callback){
-		getData(callback)
+	static fetchAll(){
+		return db.execute('SELECT * FROM products')
 	}
 
-	static fetchOneById(id,callback){
-		let product = null
-		getData(data=>{
-			product = data.find(p=>p.id===id)
-			callback(product)
-		})
-
+	static fetchOneById(id){
+		return db.execute('SELECT * FROM products WHERE id = ?',[id])
 
 	}
 
 	static deleteById(id){
-			let product = null
-					getData(data=>{
-					const updatedProductsArray = data.filter(p=>p.id!==id)
-					fs.writeFile(p, JSON.stringify(updatedProductsArray),err=>{
-						if (!err) {
-							product=data.find(p=>p.id===id)
-							Cart.deleteFromCart(id,product.price)
-						}
-					})
-				})
+		
 
 	}
 }

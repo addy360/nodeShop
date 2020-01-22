@@ -4,39 +4,47 @@ const Cart = require('../models/Cart')
 
 
 exports.getProducts = (req, res, next)=>{
-	Product.fetchAll((prod)=> {
+	Product.fetchAll()
+	.then(([rows,fieldData])=>{
+		console.log(rows)
 		let data = {
-		products:prod,
+		products:rows,
 		pageTitle:'All products',
 		path : '/products'
 	}
 	res.render('shop/product-list',data)
 	})
+	.catch(err=>console.log(err))
 	
 
 }
 
 exports.getProduct = (req,res,next)=>{
 	let productId = req.params.id
-	Product.fetchOneById(productId,product=>{
+	Product.fetchOneById(productId)
+	.then(([row,fieldData])=>{
+		console.log(row)
 		let data = {
-		product:product,
+		product:row[0],
 		pageTitle:'Product Details',
 		path : ''
 	}
 		res.render('shop/product-item',data)
 	})
+	.catch(err=>console.log(err))
 }
 
 exports.getIndex=(req,res,next)=>{
-	Product.fetchAll((prod)=> {
+	Product.fetchAll()
+	.then(([rows,fieldData])=> {
 		let data = {
-		products:prod,
+		products:rows,
 		pageTitle:'Products',
 		path : '/'
 	}
 	res.render('shop/index',data)
 	})
+	.catch(err=>console.log(err))
 	
 }
 
@@ -63,10 +71,12 @@ exports.getCart = (req,res,next)=>{
 
 exports.postCart= (req,res,next)=>{
 	productId = req.body.productId
-	Product.fetchOneById(productId,product=>{
-		Cart.addToCart(productId,product.price)
+	Product.fetchOneById(productId)
+	.then(([row])=>{
+		Cart.addToCart(productId,row.price)
+		res.redirect('/cart')
 	})
-	res.redirect('/cart')
+	.catch(err=>console.log(err))
 }
 
 exports.getOrders = (req,res,next)=>{
@@ -87,9 +97,11 @@ exports.getCheckout = (req,res,next)=>{
 
 exports.deleteCart=(req,res,next)=>{
 	const id = req.body.id
-	Product.fetchOneById(id,product=>{
+	Product.fetchOneById(id)
+	.then(product=>{
 		Cart.deleteFromCart(id,product.price)
 		res.redirect('/cart')
 	})
+	.catch(err=>console.log(err))
 }
 
