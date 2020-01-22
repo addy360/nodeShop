@@ -2,4 +2,29 @@
 <body>
 <%- include('../includes/nav.ejs') %>
 
+	<main class="mt">
+		<div class="container">
+			<% if (cart.length<1) { %>
+				<h1 class="text-center y-2">No carts available</h1>
+			<% } else { %>
+				<div class="card mx-auto text-center">
+					<ul>
+						<%cart.forEach(item=>{%>
+								<li class="d-block">
+									<div class="cart-item">
+										<p class="mb"><%= item.product.title %> (<%= item.qty %>)</p>
+										<form method="post" action="/cart-delete">
+											<input type="hidden" value="<%= item.product.id %>" name="id">
+											<button class="button">Remove</button>
+										</form>
+									</div>
+								</li>
+						<%})%>
+					</ul>
+				</div>
+			<% } %>
+			
+		</div>
+	</main>
+
 <%- include('../includes/footer.ejs') %>

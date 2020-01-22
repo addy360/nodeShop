@@ -22,7 +22,6 @@ exports.getEditProduct = (req, res, next)=>{
 		return res.redirect('/')
 	}
 	Product.fetchOneById(productId, product=>{
-		console.log(product)
 		if(!product) return res.redirect('/')
 		let data ={
 				pageTitle:'Edit product',
@@ -55,4 +54,9 @@ exports.getProducts = (req,res,next)=>{
 	}
 	res.render('admin/products',data)
 	})
+}
+
+exports.postDeleteProduct = (req, res, next)=>{
+	Product.deleteById(req.body.productId)
+	res.redirect('/admin/products')
 }

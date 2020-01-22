@@ -32,4 +32,31 @@ module.exports = class Cart{
 		})
 	}
 
+
+	static deleteFromCart(id,price){
+		fs.readFile(p,(err,data)=>{
+			if (err) {
+				return
+			}
+			const cart = JSON.parse(data)
+			const updatedCart={...cart}
+			const product = updatedCart.products.find(p=>p.id===id)
+			if (!product) return
+			const productQty = product.qty
+			updatedCart.products = updatedCart.products.filter(p=>p.id !== id)
+			updatedCart.priceTotal = updatedCart.priceTotal - (price*productQty)
+			fs.writeFile(p,JSON.stringify(updatedCart),err=>console.log(err))
+		})
+	}
+
+	static getAllCartProducts(callback){
+		fs.readFile(p,(err,data)=>{
+			if (err) callback({
+				products: [],
+				priceTotal: 0
+			})
+			callback(JSON.parse(data))	
+		})
+	}
+
 }

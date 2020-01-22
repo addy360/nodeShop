@@ -41,11 +41,24 @@ exports.getIndex=(req,res,next)=>{
 }
 
 exports.getCart = (req,res,next)=>{
-	let data = {
-		path: '/cart',
-		pageTitle:'your cart'
-	}
-	res.render('shop/cart' , data)
+	Cart.getAllCartProducts(cart=>{
+		const productsInCart = []
+		Product.fetchAll(products=>{
+			for(product of products){
+				const prod = cart.products.find(p=>p.id===product.id)
+				if (prod) {
+					productsInCart.push({product,qty:prod.qty})
+				}
+			}
+			console.log(productsInCart)
+			let data = {
+				path: '/cart',
+				pageTitle:'your cart',
+				cart:productsInCart
+			}
+			res.render('shop/cart' , data)
+		})
+	})
 }
 
 exports.postCart= (req,res,next)=>{
@@ -70,5 +83,13 @@ exports.getCheckout = (req,res,next)=>{
 		pageTitle:'Checkout'
 	}
 	res.render('shop/checkout' , data)
+}
+
+exports.deleteCart=(req,res,next)=>{
+	const id = req.body.id
+	Product.fetchOneById(id,product=>{
+		Cart.deleteFromCart(id,product.price)
+		res.redirect('/cart')
+	})
 }
 
