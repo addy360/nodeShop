@@ -11,6 +11,7 @@ const postCartController = require('../controllers/shop').postCart
 const getOrdersController = require('../controllers/shop').getOrders
 const getCheckoutController = require('../controllers/shop').getCheckout
 const deleteCartController = require('../controllers/shop').deleteCart
+const postOrderController = require('../controllers/shop').postOrder
 
 
 
@@ -19,6 +20,7 @@ router.get('/',getIndexController)
 router.get('/cart',getCartController)
 router.post('/cart',postCartController)
 router.post('/cart-delete',deleteCartController)
+router.post('/cart-clear',postOrderController)
 router.get('/orders',getOrdersController)
 router.get('/products',getProductsController)
 router.get('/products/:id',getProductController)

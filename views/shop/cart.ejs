@@ -8,19 +8,24 @@
 				<h1 class="text-center y-2">No carts available</h1>
 			<% } else { %>
 				<div class="card mx-auto text-center">
-					<ul>
+					<ul class="mb">
 						<%cart.forEach(item=>{%>
 								<li class="d-block">
 									<div class="cart-item">
-										<p class="mb"><%= item.product.title %> (<%= item.qty %>)</p>
+										<p class="mb"><%= item.title %> (<%= item.cartItem.qty %>)</p>
 										<form method="post" action="/cart-delete">
-											<input type="hidden" value="<%= item.product.id %>" name="id">
-											<button class="button">Remove</button>
+											<input type="hidden" value="<%= item.id %>" name="id">
+											<button type="submit" class="button bg-warning">Remove</button>
 										</form>
 									</div>
 								</li>
 						<%})%>
 					</ul>
+					<div class="mx-auto mt">
+						<form method="post" action="/cart-clear">
+							<button class="button bg-success" type="submit">Order now</button>
+						</form>
+					</div>
 				</div>
 			<% } %>
 			

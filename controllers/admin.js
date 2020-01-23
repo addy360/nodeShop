@@ -10,8 +10,13 @@ exports.postAddProduct=(req,res,next)=>{
 	const imgUrl = req.body.imgUrl
 	const description = req.body.description
 	const price = req.body.price
-	let product = new Product(null, title,imgUrl,description,price)
-	product.save()
+	Product.create({
+		title,
+		price,
+		imgUrl,
+		description,
+		userId:req.user.id
+	})
 	.then(res.redirect('/'))
 	.catch(err=>console.log(err))
 	
@@ -23,13 +28,14 @@ exports.getEditProduct = (req, res, next)=>{
 	if (!editMode) {
 		return res.redirect('/')
 	}
-	Product.fetchOneById(productId, product=>{
+	req.user.getProducts({where:{id:productId}})
+	.then(product=>{
 		if(!product) return res.redirect('/')
 		let data ={
 				pageTitle:'Edit product',
 			 	path: 'admin/edit-product',
 			 	editMode,
-			 	product
+			 	product:product[0]
 			}
 		
 		res.render('admin/edit-product', data)
@@ -42,13 +48,23 @@ exports.postEditProduct = (req, res, next)=>{
 	const imgUrl=req.body.imgUrl
 	const price=req.body.price
 	const description=req.body.description
-	const updatedProduct = new Product(productId,title,imgUrl,description,price)
-	updatedProduct.save()
-	res.redirect('/admin/products')
+	Product.findAll({where:{id:productId}})
+	.then(product=>{
+		product[0].title = title
+		product[0].imgUrl = imgUrl
+		product[0].price = price
+		product[0].description = description
+		return product[0].save()
+	})
+	.then(data=>{
+		res.redirect('/admin/products')
+	})
+	.catch(err=>console.log(err))
 }
 
 exports.getProducts = (req,res,next)=>{
-	Product.fetchAll((prod)=> {
+	req.user.getProducts()
+	.then((prod)=> {
 		let data = {
 		products:prod,
 		pageTitle:'Admin Products',
@@ -56,9 +72,14 @@ exports.getProducts = (req,res,next)=>{
 	}
 	res.render('admin/products',data)
 	})
+	.catch(err=>console.log(err))
 }
 
 exports.postDeleteProduct = (req, res, next)=>{
-	Product.deleteById(req.body.productId)
-	res.redirect('/admin/products')
+	const id = req.body.productId
+	Product.destroy({where:{id:id}})
+	.then(data=>{
+		res.redirect('/admin/products')
+	})
+	.catch(err=>console.log(err))
 }

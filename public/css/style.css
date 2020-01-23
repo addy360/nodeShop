@@ -127,3 +127,23 @@
 	.cart-item:hover{
 		background: #eee;
 	}
+	.bg-success{
+		background: indigo;
+		color: #fff
+	}
+	.bg-warning{
+		background: orange;
+		color: #333
+	}
+
+	.list{
+		display: grid;
+		grid-template-columns: 50px auto;
+		padding: 1rem;
+		background: #eee;
+		border-bottom: 1px solid #ccc
+	}
+
+	.list-item{
+
+	}

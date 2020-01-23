@@ -1,5 +1,27 @@
 <%- include('../includes/header.ejs') %>
 <body>
 <%- include('../includes/nav.ejs') %>
-
+	<main class="mt">
+		<div class="container">
+			<div class="card mx-auto ">
+				<% if (orders.length < 1) { %>
+					<h1>Yoh buddy!! you have no orders</h1>
+				<% } else { %>
+					<ul>
+						<% orders.forEach(order=>{%>
+							<div class="list">
+								<li class="list-item">#<%= order.id %></li>
+								<ul class="list-item">
+									<% order.products.forEach(data=>{%>
+										<li><%= data.title %> (<%= data.orderItem.qty %>)</li>
+									<% }) %>	
+								</ul>
+							</div>
+						<%})%>
+					</ul>
+				<% } %>
+				
+			</div>
+		</div>
+	</main>
 <%- include('../includes/footer.ejs') %>
