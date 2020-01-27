@@ -1,4 +1,6 @@
 const Product = require('../models/Product')
+const ObjectId = require('mongodb').ObjectID;
+
 
 exports.getAddProduct = (req, res, next)=>{
 	
@@ -6,18 +8,14 @@ exports.getAddProduct = (req, res, next)=>{
 }
 
 exports.postAddProduct=(req,res,next)=>{
+	const userId = req.user._id
 	const title = req.body.title
 	const imgUrl = req.body.imgUrl
 	const description = req.body.description
 	const price = req.body.price
-	Product.create({
-		title,
-		price,
-		imgUrl,
-		description,
-		userId:req.user.id
-	})
-	.then(res.redirect('/'))
+	let product = new Product(title,price,imgUrl,description,null,userId)
+	product.save()
+	.then(res.redirect('/admin/products'))
 	.catch(err=>console.log(err))
 	
 }
@@ -28,14 +26,14 @@ exports.getEditProduct = (req, res, next)=>{
 	if (!editMode) {
 		return res.redirect('/')
 	}
-	req.user.getProducts({where:{id:productId}})
+	Product.findById(productId)
 	.then(product=>{
 		if(!product) return res.redirect('/')
 		let data ={
 				pageTitle:'Edit product',
 			 	path: 'admin/edit-product',
 			 	editMode,
-			 	product:product[0]
+			 	product:product
 			}
 		
 		res.render('admin/edit-product', data)
@@ -48,22 +46,17 @@ exports.postEditProduct = (req, res, next)=>{
 	const imgUrl=req.body.imgUrl
 	const price=req.body.price
 	const description=req.body.description
-	Product.findAll({where:{id:productId}})
-	.then(product=>{
-		product[0].title = title
-		product[0].imgUrl = imgUrl
-		product[0].price = price
-		product[0].description = description
-		return product[0].save()
-	})
-	.then(data=>{
+	const product = new Product(title,price,imgUrl,description,new ObjectId(productId) )
+	product.save()
+	.then(()=>{
+		console.log("Updated")
 		res.redirect('/admin/products')
 	})
 	.catch(err=>console.log(err))
 }
 
 exports.getProducts = (req,res,next)=>{
-	req.user.getProducts()
+	Product.fetchAll()
 	.then((prod)=> {
 		let data = {
 		products:prod,
@@ -77,8 +70,8 @@ exports.getProducts = (req,res,next)=>{
 
 exports.postDeleteProduct = (req, res, next)=>{
 	const id = req.body.productId
-	Product.destroy({where:{id:id}})
-	.then(data=>{
+	Product.deleteById(id)
+	.then(()=>{
 		res.redirect('/admin/products')
 	})
 	.catch(err=>console.log(err))

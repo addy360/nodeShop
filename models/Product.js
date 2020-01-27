@@ -1,27 +1,64 @@
-const Sequelize = require('sequelize')
+const getDb = require('../util/database').getDb
+const ObjectId = require('mongodb').ObjectID;
 
-const sequelize = require('../util/database')
-
-const Product = sequelize.define('product',{
-	id:{
-		type:Sequelize.INTEGER,
-		autoIncrement:true,
-		allowNull:false,
-		primaryKey:true
-	},
-	title:Sequelize.STRING,
-	price:{
-		type:Sequelize.DOUBLE,
-		allowNull:false
-	},
-	imgUrl:{
-		type:Sequelize.STRING,
-		allowNull:false
-	},
-	description:{
-		type:Sequelize.TEXT,
-		allowNull:false
+class Product{
+	constructor(title, price,imgUrl,description,id,userId){
+		this.title = title
+		this.price = price
+		this.imgUrl = imgUrl
+		this.description= description
+		this._id = id
+		this.userId= userId
 	}
-})
+
+	save(){
+		const db = getDb()
+		let dbop = null
+		if (this._id) {
+			// update the product
+			dbop = db.collection('products').updateOne({'_id':new ObjectId(this._id)},{$set:this})
+		} else {
+			dbop = db.collection('products').insertOne(this)
+		}
+		return dbop
+		.then(result=>console.log("Data inserted"))
+		.catch(err=>console.log(err))
+	}
+
+	static fetchAll(){
+		const db = getDb()
+		return db.collection('products').find().toArray()
+		.then(result=>{
+			// console.log(result)
+			return result
+		})
+		.catch(err=>console.log(err))
+	}
+
+	static findById(id){
+		const db = getDb()
+		return db.collection('products').find({'_id':new ObjectId(id)}).next()
+		.then(result=>{
+			console.log(result)
+			if (result) {
+				return result
+
+			} else {
+				throw "Wrong query"
+			}
+		})
+	}
+
+	static deleteById(id){
+		const db = getDb()
+		return db.collection('products').deleteOne({'_id':new ObjectId(id)})
+		.then(data=>{
+			console.log('item deleted')
+		})
+		.catch(err=>console.log(err))
+	}
+}
+
+
 
 module.exports = Product

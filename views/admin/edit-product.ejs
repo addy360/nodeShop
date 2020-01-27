@@ -8,7 +8,7 @@
 				<h1 class="mb text-center"><% if(editMode){ %> Update product <%} else{%> Add product<%}%></h1>
 				<form action="/admin/<% if(editMode){ %>edit-product <%} else{%>add-product<%}%>" method="post">
 					<% if (editMode) { %>
-						<input type="hidden" value="<%= product.id%>" name="productId">
+						<input type="hidden" value="<%= product._id%>" name="productId">
 					<% } %>
 					
 					<input class="input mb" type="text" name="title" placeholder="Enter title" value="<% if(editMode){ %><%= product.title%><%}%>">
