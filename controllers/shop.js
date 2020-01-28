@@ -11,7 +11,9 @@ exports.getProducts = (req, res, next)=>{
 		let data = {
 		products:product,
 		pageTitle:'All products',
-		path : '/products'
+		path : '/products',
+		isAuth:req.session.isLoggedIn
+
 	}
 	res.render('shop/product-list',data)
 	})
@@ -28,7 +30,9 @@ exports.getProduct = (req,res,next)=>{
 		let data = {
 		product:row,
 		pageTitle:'Product Details',
-		path : ''
+		path : '',
+		isAuth:req.session.isLoggedIn
+
 	}
 		res.render('shop/product-item',data)
 	})
@@ -41,7 +45,9 @@ exports.getIndex=(req,res,next)=>{
 		let data = {
 		products:product,
 		pageTitle:'Products',
-		path : '/'
+		path : '/',
+		isAuth:req.session.isLoggedIn
+
 	}
 	res.render('shop/index',data)
 	})
@@ -58,7 +64,9 @@ exports.getCart = (req,res,next)=>{
 		let data = {
 				path: '/cart',
 				pageTitle:'your cart',
-				cart:products
+				cart:products,
+				isAuth:req.session.isLoggedIn
+
 			}
 			res.render('shop/cart' , data)
 	})
@@ -112,7 +120,9 @@ exports.getOrders = (req,res,next)=>{
 		let data = {
 			path: '/orders',
 			pageTitle:'your orders',
-			orders
+			orders,
+			isAuth:req.session.isLoggedIn
+
 		}
 		res.render('shop/orders' , data)
 	})
@@ -124,7 +134,9 @@ exports.getOrders = (req,res,next)=>{
 exports.getCheckout = (req,res,next)=>{
 	let data = {
 		path: '/checkout',
-		pageTitle:'Checkout'
+		pageTitle:'Checkout',
+		isAuth:req.session.isLoggedIn
+		
 	}
 	res.render('shop/checkout' , data)
 }

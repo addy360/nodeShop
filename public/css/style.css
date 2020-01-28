@@ -7,14 +7,19 @@
 	body,html{
 		
 	}
+	nav{
+		background: #555;
+		width: 100%;
+	}
 	.container{
 		width: 1000px;
 		margin: auto;
 	}
-	nav{
-		padding: 6px 0;
-		background: #555;
-		width: 100%;
+	.ml-auto{
+		margin-left: auto;
+	}
+	.nav {
+		
 		display: flex;
 		align-items: center;
 	}
@@ -151,4 +156,29 @@
 		border-bottom: 1px solid #000;
 		margin-bottom: 3px;
 		padding: 1rem;
+	}
+
+	.login{
+		width: 50%;
+		padding: 1rem;
+		box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+	}
+	.login h1{
+		font-size: 1.3rem;
+		padding: 2rem;
+	}
+	.form-group{
+		display: flex;
+		padding: 1rem;
+	}
+	.form-group label{
+		margin-right: 1rem;
+		display: inline-block;
+		width: 30%;
+	}
+	.form-group input{
+		display: inline-block;
+		width: 70%;
+		padding: .3rem;
+		border-radius: 3px;
 	}

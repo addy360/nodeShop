@@ -4,7 +4,8 @@ const ObjectId = require('mongodb').ObjectID;
 
 exports.getAddProduct = (req, res, next)=>{
 	
-	res.render('admin/edit-product',{pageTitle:'Add product', path: 'admin/add-product',editMode:false})
+	res.render('admin/edit-product',{pageTitle:'Add product', path: 'admin/add-product',editMode:false,isAuth:req.isLoggedIn
+})
 }
 
 exports.postAddProduct=(req,res,next)=>{
@@ -33,7 +34,9 @@ exports.getEditProduct = (req, res, next)=>{
 				pageTitle:'Edit product',
 			 	path: 'admin/edit-product',
 			 	editMode,
-			 	product:product
+			 	product:product,
+				isAuth:req.isLoggedIn
+
 			}
 		
 		res.render('admin/edit-product', data)
@@ -68,7 +71,9 @@ exports.getProducts = (req,res,next)=>{
 		let data = {
 		products:prod,
 		pageTitle:'Admin Products',
-		path : 'admin/products'
+		path : 'admin/products',
+		isAuth:req.isLoggedIn
+
 	}
 	res.render('admin/products',data)
 	})

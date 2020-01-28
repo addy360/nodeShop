@@ -1,14 +1,34 @@
 <header>
 	<nav >
 		<div class="container">
-			<ul>
-				<li><a class="<%=  path=== '/'? 'active': '' %>" href="/">Shop</a></li>
-				<li><a class="<%=  path=== '/products'? 'active': '' %>" href="/products">Products</a></li>
-				<li><a class="<%=  path=== '/cart'? 'active': '' %>" href="/cart">Cart</a></li>
-				<li><a class="<%=  path=== '/orders'? 'active': '' %>" href="/orders">Orders</a></li>
-				<li><a class="<%=  path=== 'admin/products'? 'active': '' %>" href="/admin/products">Admin Product</a></li>
-				<li><a class="<%=  path=== 'admin/add-product'? 'active': '' %>" href="/admin/add-product">Add Product</a></li>
-			</ul>
+			<div class="nav">
+				<ul>
+					<li><a class="<%=  path=== '/'? 'active': '' %>" href="/">Shop</a></li>
+					<li><a class="<%=  path=== '/products'? 'active': '' %>" href="/products">Products</a></li>
+					<% if (isAuth) { %>
+						<li><a class="<%=  path=== '/cart'? 'active': '' %>" href="/cart">Cart</a></li>
+						<li><a class="<%=  path=== '/orders'? 'active': '' %>" href="/orders">Orders</a></li>
+						<li><a class="<%=  path=== 'admin/products'? 'active': '' %>" href="/admin/products">Admin Product</a></li>
+						<li><a class="<%=  path=== 'admin/add-product'? 'active': '' %>" href="/admin/add-product">Add Product</a></li>
+					<% } %>
+					
+				</ul>
+				<ul class="ml-auto">
+					<% if (!isAuth) { %>
+						<li>
+							<a class="<%=  path=== '/auth/login'? 'active': '' %>" href="/auth/login">Login</a>
+						</li>
+					<% } else { %>
+						<li>
+							<a href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+						</li>
+					<% } %>
+					
+						<form id="logout" action="/auth/logout" method="post">
+							
+						</form>
+				</ul>
+			</div>
 		</div>
 		
 	</nav>
