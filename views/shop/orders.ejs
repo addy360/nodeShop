@@ -4,7 +4,7 @@
 	<main class="mt">
 		<div class="container">
 			<div class="card mx-auto ">
-				<% if (orders.length < 1) { %>
+				<% if (orders.length == 0 ) { %>
 					<h1>Yoh buddy!! you have no orders</h1>
 				<% } else { %>
 					<ul>
@@ -12,8 +12,8 @@
 							<div class="list">
 								<li class="list-item">#<%= order._id %></li>
 								<ul class="list-item">
-									<% order.items.forEach(data=>{%>
-										<li><%= data.title %> (<%= data.qty %>)</li>
+									<% order.products.forEach(data=>{%>
+										<li><%= data.product.title %> (<%= data.qty %>)</li>
 									<% }) %>	
 								</ul>
 							</div>

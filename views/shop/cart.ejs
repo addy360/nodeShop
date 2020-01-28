@@ -12,9 +12,9 @@
 						<%cart.forEach(item=>{%>
 								<li class="d-block">
 									<div class="cart-item">
-										<p class="mb"><%= item.title %> (<%= item.qty %>)</p>
+										<p class="mb"><%= item.productId.title %> <strong>(Qty: <%= item.qty %>)</strong></p>
 										<form method="post" action="/cart-delete">
-											<input type="hidden" value="<%= item._id %>" name="id">
+											<input type="hidden" value="<%= item.productId._id %>" name="id">
 											<button type="submit" class="button bg-warning">Remove</button>
 										</form>
 									</div>

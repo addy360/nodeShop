@@ -136,14 +136,19 @@
 		color: #333
 	}
 
-	.list{
-		display: grid;
-		grid-template-columns: 50px auto;
-		padding: 1rem;
-		background: #eee;
-		border-bottom: 1px solid #ccc
+	.list > li{
+		border:1px solid #333;
+		border-radius: 4px;
 	}
 
-	.list-item{
+	.list .list-item{
+		padding: 1rem;
+		display: block;
+	}
 
+	.list-item >li{
+		display: block;
+		border-bottom: 1px solid #000;
+		margin-bottom: 3px;
+		padding: 1rem;
 	}
