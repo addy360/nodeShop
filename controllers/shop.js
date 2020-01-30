@@ -46,7 +46,7 @@ exports.getIndex=(req,res,next)=>{
 		products:product,
 		pageTitle:'Products',
 		path : '/',
-		isAuth:req.session.isLoggedIn
+		isAuth:req.session.isLoggedIn,
 
 	}
 	res.render('shop/index',data)
@@ -162,7 +162,7 @@ exports.postOrder=(req,res,next)=>{
 		})
 		const order = new Order({
 			user:{
-				username:req.user.username,
+				email:req.user.email,
 				userId:req.user
 			},
 			products

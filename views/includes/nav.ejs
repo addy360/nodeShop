@@ -18,6 +18,9 @@
 						<li>
 							<a class="<%=  path=== '/auth/login'? 'active': '' %>" href="/auth/login">Login</a>
 						</li>
+						<li>
+							<a class="<%=  path=== '/auth/signup'? 'active': '' %>" href="/auth/signup">Register</a>
+						</li>
 					<% } else { %>
 						<li>
 							<a href="javascript:{document.getElementById('logout').submit()}">Logout</a>
@@ -25,7 +28,7 @@
 					<% } %>
 					
 						<form id="logout" action="/auth/logout" method="post">
-							
+							<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 						</form>
 				</ul>
 			</div>

@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const path = require('path')
 const rootDir = require('../util/path')
+const isAuth = require('../middleware/is-auth')
 
 
 const getIndexController = require('../controllers/shop').getIndex
@@ -17,11 +18,11 @@ const postOrderController = require('../controllers/shop').postOrder
 
 router.get('/',getIndexController)
 
-router.get('/cart',getCartController)
-router.post('/cart',postCartController)
-router.post('/cart-delete',deleteCartController)
-router.post('/cart-clear',postOrderController)
-router.get('/orders',getOrdersController)
+router.get('/cart',isAuth,getCartController)
+router.post('/cart',isAuth,postCartController)
+router.post('/cart-delete',isAuth,deleteCartController)
+router.post('/cart-clear',isAuth,postOrderController)
+router.get('/orders',isAuth,getOrdersController)
 router.get('/products',getProductsController)
 router.get('/products/:id',getProductController)
 // router.get('/checkout',getCheckoutController)

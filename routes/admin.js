@@ -7,11 +7,12 @@ const adminController = require('../controllers/admin').getProducts
 const editAdminController = require('../controllers/admin').getEditProduct
 const editPostController = require('../controllers/admin').postEditProduct
 const deleteAdminController = require('../controllers/admin').postDeleteProduct
+const isAuth = require('../middleware/is-auth')
 
 const router = express.Router()
 
 
-router.get('/add-product',getAdminController)
+router.get('/add-product',isAuth,getAdminController)
 
 router.get('/products' ,adminController)
 
