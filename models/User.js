@@ -6,6 +6,8 @@ const userSchema = new Schema({
 		type:String,
 		required:true
 	},
+	token:String,
+	tokenExp:Date,
 	email:{
 		type:String,
 		required:true

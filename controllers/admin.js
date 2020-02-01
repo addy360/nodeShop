@@ -65,7 +65,7 @@ exports.postEditProduct = (req, res, next)=>{
 }
 
 exports.getProducts = (req,res,next)=>{
-	Product.find()
+	Product.find({_id:req.user._id})
 	.then((prod)=> {
 		let data = {
 		products:prod,
