@@ -1,5 +1,14 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
+const sendGridTransport = require('nodemailer-sendgrid-transport')
+
+// initializng nodemailer
+const transporter = nodemailer.createTransport(sendGridTransport({
+	auth:{
+		api_key:'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'
+	}
+})) 
 
 exports.login=(req,res,next)=>{
 	// const isLoggedIn = req.get('Cookie').split(';')[0].trim().split('=')[1]
@@ -53,10 +62,13 @@ exports.postLogout=(req,res,next)=>{
 }
 
 exports.signUp = (req,res,next)=>{
+	message = req.flash('error')
+
 	let data ={
 				pageTitle:'Sign Up',
 			 	path: '/auth/signup',
-			 	isAuth:false
+			 	isAuth:false,
+			 	message
 			}
 	res.render('auth/signup',data)
 }
@@ -64,6 +76,7 @@ exports.postSignUp = (req,res,next)=>{
 	const email = req.body.email
 	const password = req.body.Password
 	const password2 = req.body.Password2
+
 	User.findOne({email:email})
 	.then(result=>{
 		if (result) {
@@ -83,8 +96,16 @@ exports.postSignUp = (req,res,next)=>{
 		})
 		.then(savedUser=>{
 			// console.log(savedUser)
-			return res.redirect('/auth/login')
+			res.redirect('/auth/login')
+			return transporter.sendMail({
+						to: email,
+  						from: 'node.shop@addy360.com',
+ 						subject: 'Sign up verified email',
+  						text: `Helo dear ${email}`,
+  						html: '<strong>Guess what, You have just been signed up with our online shop, congs!!</strong>',
+					})
 		})
+
 		
 	})
 	.catch(err=>console.log(err))
