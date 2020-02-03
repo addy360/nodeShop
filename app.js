@@ -59,6 +59,7 @@ app.use(flash())
 // asigning global variables to all the views
 app.use((req,res,next)=>{
 	res.locals.csrfToken=req.csrfToken()
+	res.locals.success_msg=req.flash('success_msg')
 	next()
 })
 

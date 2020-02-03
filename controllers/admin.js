@@ -1,5 +1,6 @@
 const Product = require('../models/Product')
 const ObjectId = require('mongodb').ObjectID;
+const { validationResult } = require('express-validator')
 
 
 exports.getAddProduct = (req, res, next)=>{
@@ -13,6 +14,8 @@ exports.postAddProduct=(req,res,next)=>{
 	const imgUrl = req.body.imgUrl
 	const description = req.body.description
 	const price = req.body.price
+	const errors = validationResult(req)
+	console.log(errors)
 	let product = new Product({title,imgUrl,description,price,userId})
 	product.save()
 	.then(res.redirect('/admin/products'))

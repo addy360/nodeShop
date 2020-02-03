@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const { validationResult } = require('express-validator')
 
 const bcrypt = require('bcryptjs')
 const nodemailer = require('nodemailer')
@@ -22,7 +23,7 @@ exports.login=(req,res,next)=>{
 			 	isAuth:false,
 			 	message
 			}
-			console.log(req.session)
+			// console.log(req.session)
 	res.render('auth/login',data)
 }
 
@@ -30,6 +31,18 @@ exports.postLogin=(req,res,next)=>{
 		const email = req.body.email
 		const password = req.body.Password
 		let user = null
+		const errors = validationResult(req)
+		// console.log(errors)
+		if (!errors.isEmpty()) {
+			let data ={
+				pageTitle:'Login',
+			 	path: '/auth/login',
+			 	isAuth:false,
+			 	message:errors.errors[0].msg
+			}
+			// console.log(req.session)
+	   		return res.render('auth/login',data)
+		}
 		User.findOne({email:email})
 		.then(userResult=>{
 			user = userResult
@@ -65,7 +78,6 @@ exports.postLogout=(req,res,next)=>{
 
 exports.signUp = (req,res,next)=>{
 	message = req.flash('error')
-
 	let data ={
 				pageTitle:'Sign Up',
 			 	path: '/auth/signup',
@@ -78,7 +90,19 @@ exports.postSignUp = (req,res,next)=>{
 	const email = req.body.email
 	const password = req.body.Password
 	const password2 = req.body.Password2
-
+	const errors = validationResult(req)
+		if (!errors.isEmpty()) {
+			// console.log(errors)
+			// message = req.flash('error')
+		let data ={
+				pageTitle:'Sign Up',
+			 	path: '/auth/signup',
+			 	isAuth:false,
+			 	message:errors.errors[0].msg
+			}
+		return res.render('auth/signup',data)
+		}
+			// console.log(errors)
 	User.findOne({email:email})
 	.then(result=>{
 		if (result) {
