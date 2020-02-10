@@ -10,6 +10,7 @@ const getProductController = require('../controllers/shop').getProduct
 const getCartController = require('../controllers/shop').getCart
 const postCartController = require('../controllers/shop').postCart
 const getOrdersController = require('../controllers/shop').getOrders
+const getInvoiceController = require('../controllers/shop').getInvoice
 // const getCheckoutController = require('../controllers/shop').getCheckout
 const deleteCartController = require('../controllers/shop').deleteCart
 const postOrderController = require('../controllers/shop').postOrder
@@ -23,6 +24,7 @@ router.post('/cart',isAuth,postCartController)
 router.post('/cart-delete',isAuth,deleteCartController)
 router.post('/cart-clear',isAuth,postOrderController)
 router.get('/orders',isAuth,getOrdersController)
+router.get('/orders/:orderId',isAuth,getInvoiceController)
 router.get('/products',getProductsController)
 router.get('/products/:id',getProductController)
 // router.get('/checkout',getCheckoutController)

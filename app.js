@@ -1,11 +1,13 @@
 const express = require('express')
 const bodyparser = require('body-parser')
+const multer = require('multer')
 const path = require('path')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const csrf = require('csurf')
 const flash = require('connect-flash')
+const keys = require('./conf/keys')
 
 // MODELS
 const User = require('./models/User')
@@ -15,7 +17,25 @@ const adminData = require('./routes/admin')
 const shopRoutes = require('./routes/shop')
 const authRoutes = require('./routes/auth')
 // constants
-const MONGO_URI = 'mongodb://addyNode:addyNode1111@nodeapp-shard-00-00-tpzfw.mongodb.net:27017,nodeapp-shard-00-01-tpzfw.mongodb.net:27017,nodeapp-shard-00-02-tpzfw.mongodb.net:27017/shop?ssl=true&replicaSet=nodeApp-shard-0&authSource=admin&retryWrites=true&w=majority'
+const MONGO_URI = keys.mongoUri
+
+// multer
+const storage = multer.diskStorage({
+  filename:  (req, file, cb)=> {
+    cb(null, new Date().toISOString().replace(/:/g, '-')+file.originalname)
+  },
+  destination: (req, file, cb) =>{
+      cb(null,'public/images')
+  },
+})
+
+const fileFilter = (req,file,cb)=>{
+	if (file.mimetype == 'image/png' || file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' ) {
+		cb(null, true)
+	}else{
+		cb(null,false)
+	}
+}
 
 const app = express()
 const store = new MongoDBStore({
@@ -28,6 +48,7 @@ const csrfProtection = csrf()
 app.set('view engine','ejs')
 app.set('views','views')
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/public',express.static(path.join(__dirname, 'public')))
 app.use(session({
 	secret:'any string',
 	resave:false,
@@ -54,6 +75,10 @@ app.use((req,res,next)=>{
 	})
 })
 app.use(bodyparser.urlencoded({extended:false}))
+
+
+app.use(multer({storage,fileFilter}).single('image'))
+
 app.use(csrfProtection)
 app.use(flash())
 // asigning global variables to all the views

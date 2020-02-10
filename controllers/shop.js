@@ -1,3 +1,7 @@
+const path = require('path')
+const fs = require('fs')
+const PDFDocument = require('pdfkit')
+
 const Product = require('../models/Product')
 // const Cart = require('../models/Cart')
 const Order = require('../models/Order')
@@ -129,6 +133,70 @@ exports.getOrders = (req,res,next)=>{
 	.catch(err=>{
 		console.log(err)
 	})
+}
+
+exports.getInvoice=(req,res,next)=>{
+	const id = req.params.orderId
+	const invoiceName = `Invoice_${id}.pdf`
+	const invoicePath = path.join('data', 'invoices',invoiceName)
+	// console.log(invoicePath)
+	Order.findOne({'user.userId':req.user._id})
+	.then(order=>{
+		if (!order) {
+			return next(new Error('UnAuthorized'))
+		}
+	})
+	Order.findById(id)
+	.then(order=>{
+		if (!order) {
+			return next(new Error('No orders'))
+		}
+		const pdfDoc = new PDFDocument()
+		res.setHeader('Content-Type', 'application/pdf')
+		res.setHeader('Content-Disposition',`inline; filename=${invoiceName}`)
+
+		pdfDoc.pipe(fs.createWriteStream(invoicePath))
+		pdfDoc.pipe(res)
+
+		pdfDoc.fontSize(28)
+		pdfDoc.text('Invoice',{
+			align:'center',
+			underline:true
+		})
+		pdfDoc.fontSize(16);
+		let totalPrice = 0
+		console.log(order)
+		order.products.forEach(prod=>{ 
+
+			totalPrice = totalPrice + (prod.qty*prod.product.price)
+			pdfDoc.text(`${prod.product.title} ( qty: ${prod.qty} ) = $ ${prod.product.price}`, {
+	  			align: 'left'
+			})
+
+		})
+		pdfDoc.fontSize(12)
+		pdfDoc.text('--------------------------')
+		pdfDoc.text(`Total price = $ ${totalPrice}`)
+		pdfDoc.text('--------------------------')
+		
+
+		 pdfDoc.end()
+
+		// fs.readFile(invoicePath,(err,data)=>{
+		// if (err) {
+		// 	return next(err)
+		// }
+		// res.setHeader('Content-Type', 'application/pdf')
+		// res.setHeader('Content-Disposition',`inline; filename=${invoiceName}`)
+		// res.send(data)	
+	// })
+		// Streaming data
+		// const file = fs.createReadStream(invoicePath)
+		// res.setHeader('Content-Type', 'application/pdf')
+		// res.setHeader('Content-Disposition',`inline; filename=${invoiceName}`)
+		// file.pipe(res)
+	})
+	.catch(err=>console.log(err))
 }
 
 exports.getCheckout = (req,res,next)=>{

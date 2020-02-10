@@ -1,6 +1,7 @@
 const Product = require('../models/Product')
 const ObjectId = require('mongodb').ObjectID;
 const { validationResult } = require('express-validator')
+const file = require('../util/removeFile')
 
 
 exports.getAddProduct = (req, res, next)=>{
@@ -11,12 +12,20 @@ exports.getAddProduct = (req, res, next)=>{
 exports.postAddProduct=(req,res,next)=>{
 	const userId = req.user
 	const title = req.body.title
-	const imgUrl = req.body.imgUrl
+	const imgUrl = req.file
 	const description = req.body.description
 	const price = req.body.price
 	const errors = validationResult(req)
-	console.log(errors)
-	let product = new Product({title,imgUrl,description,price,userId})
+	// console.log(req.body)
+	// console.log(req.file)
+
+	if (!imgUrl) {
+		// re-render the page
+		res.send('Failed to upload the file')
+	}
+	const {path} = imgUrl
+
+	let product = new Product({title,imgUrl:'\\'+ path,description,price,userId})
 	product.save()
 	.then(res.redirect('/admin/products'))
 	.catch(err=>console.log(err))
@@ -48,13 +57,16 @@ exports.getEditProduct = (req, res, next)=>{
 exports.postEditProduct = (req, res, next)=>{
 	const productId=req.body.productId
 	const title=req.body.title
-	const imgUrl=req.body.imgUrl
+	const imgUrl=req.file
 	const price=req.body.price
 	const description=req.body.description
 	Product.findById(productId)
 	.then(product=>{
 		product.title = title
-		product.imgUrl = imgUrl
+		if (imgUrl) {
+			file.deleteFile(product.imgUrl)
+			product.imgUrl = imgUrl.path
+		}
 		product.description = description
 		product.price = price
 		return product.save()
@@ -68,8 +80,10 @@ exports.postEditProduct = (req, res, next)=>{
 }
 
 exports.getProducts = (req,res,next)=>{
-	Product.find({_id:req.user._id})
+	console.log(req.user)
+	Product.find({userId:req.user._id})
 	.then((prod)=> {
+		console.log(prod)
 		let data = {
 		products:prod,
 		pageTitle:'Admin Products',
@@ -87,6 +101,7 @@ exports.postDeleteProduct = (req, res, next)=>{
 	Product.findByIdAndRemove(id)
 	.then((result)=>{
 		// console.log(result);
+		file.deleteFile(result.imgUrl)
 		res.redirect('/admin/products')
 	})
 	.catch(err=>console.log(err))

@@ -30,10 +30,10 @@ router.post('/add-product',[
 		.isLength({min:1}),
 		body('description','Product can not have an empty description')
 		.isLength({min:1}),
-		body('imgUrl','Product can not have an empty image')
-		.isLength({min:1}),
+		// body('imgUrl','Product can not have an empty image')
+		// .isLength({min:1}),
 		
-	], can,postAdminController)
+	],postAdminController)
 router.post('/delete-product', can,deleteAdminController)
 
 exports.router= router
